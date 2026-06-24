@@ -1,6 +1,6 @@
 {
   "contract": "invoice",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "functions": [
     "initialize",
     "create_invoice",
@@ -9,7 +9,7 @@
     "get_invoice_status",
     "cancel_invoiced",
     "request_refund",
-    "batch_expire",
+    "batch_expire(offset: u32, limit: u32, returns: u32)",
     "pause",
     "unpause",
     "set_grace_window",
