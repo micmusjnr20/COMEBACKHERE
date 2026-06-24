@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../comebackhere-backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - STELLAR_NETWORK=standalone
+      - SOROBAN_RPC_URL=http://soroban:8000
+      - HORIZON_URL=http://soroban:8000
+      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ../comebackhere-backend/.env
+    volumes:
+      - ../comebackhere-backend:/app
+      - /app/target
+    depends_on:
+      soroban:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../comebackhere-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+      - VITE_SOROBAN_RPC=http://localhost:8000
+      - VITE_HORIZON_URL=http://localhost:8000
+      - VITE_NETWORK_PASSPHRASE=Standalone Network ; February 2025
+    env_file:
+      - ../comebackhere-frontend/.env
+    volumes:
+      - ../comebackhere-frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    restart: unless-stopped
