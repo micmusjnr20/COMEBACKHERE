@@ -13,11 +13,19 @@
     "pause",
     "unpause"
   ],
+  "events": [
+    "address_allowed",
+    "address_blocked",
+    "address_cleared",
+    "address_allowed_until",
+    "admin_transfer_initiated",
+    "admin_transferred",
+    "contract_paused",
+    "contract_unpaused"
+  ],
   "errors": {
     "1": "Unauthorized",
     "2": "ContractPaused",
     "3": "AlreadyInitialized"
-    "1": "unpermitted",
-    "2": "ContractPaused"
   }
 }
