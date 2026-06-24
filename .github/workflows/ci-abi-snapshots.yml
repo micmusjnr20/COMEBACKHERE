@@ -1,0 +1,40 @@
+name: CI - ABI Snapshots
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-abi:
+    name: check-abi-snapshots
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: WHEELBACK/COMEBACKHERE-contracts
+          ref: main
+          path: COMEBACKHERE-contracts
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            COMEBACKHERE-contracts/target
+          key: ${{ runner.os }}-cargo-abi-${{ hashFiles('COMEBACKHERE-contracts/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-abi-
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: make check-abi-snapshots
+
+      - name: Check for stale ABI snapshots
+        run: git diff --exit-code abis/
